@@ -1,6 +1,11 @@
 package frc.robot.subsystems;
 
-public class UltrasonicSensor {
-    UltrasonicSensor ultra = new UltrasonicSensor();
+import edu.wpi.first.wpilibj.Ultrasonic;
 
+public class UltrasonicSensor {
+    private final Ultrasonic ultra = new Ultrasonic(1,2); //put in dios
+
+    public double getDistance(){
+        return ultra.getRangeMM();
+    }
 }
