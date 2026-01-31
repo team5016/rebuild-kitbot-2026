@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 public class Intake extends SubsystemBase{
- private final TalonSRX lower = new TalonSRX(3);
+ private final TalonSRX lower = new TalonSRX(1);
  private final TalonSRX upper = new TalonSRX(6);
 
  public void spin(double speed){
