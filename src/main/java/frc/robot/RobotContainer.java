@@ -11,9 +11,16 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeSpin;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
+
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,19 +32,27 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Intake intakeSubsystem = new Intake();
+  private final IntakeSpin spinner = new IntakeSpin(intakeSubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final XboxController m_driverController =
+      new XboxController(0);
 
+  private final WPI_TalonSRX LF = new WPI_TalonSRX(2);
+  private final WPI_TalonSRX RF = new WPI_TalonSRX(4);
+  private final WPI_TalonSRX RR = new WPI_TalonSRX(5);
+  private final WPI_TalonSRX LR = new WPI_TalonSRX(3);
+  DifferentialDrive drive = new DifferentialDrive(LF,RF);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    LR.follow(LF);
+    RR.follow(RF);
   }
 
   public Command getIntakeCommand(){
-    return new IntakeSpin(intakeSubsystem);
+    return spinner;
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -55,9 +70,18 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
+
+  public double getLeftY(){
+    return m_driverController.getLeftY();
+  }
+  public double getRightY(){
+    return m_driverController.getRightY();
+  }
+  public boolean isAPressed(){
+    return m_driverController.getAButton();
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

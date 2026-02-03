@@ -15,7 +15,7 @@ public class IntakeSpin extends Command{
 
     @Override
     public void execute() {
-        intake.spin(.25);
+        intake.spin(.7);
     }
 
     @Override
